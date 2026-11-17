@@ -1,0 +1,24 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Marks 70th//Invitation//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:marks-70th-2026-12-12@james-debono.github.io
+DTSTAMP:20261117T020000Z
+DTSTART:20261212T020000Z
+DTEND:20261212T080000Z
+SUMMARY:Mark's 70th Birthday Celebration
+LOCATION:The Criterion Hotel (Balcony Room)\, 90 Macalister St\, Sale VIC 3
+ 850
+DESCRIPTION:Canapés and drinks provided. Dress code: smart casual. Balcony
+  Room is upstairs\, with lift and stair access.\n\nInvitation: https://jam
+ es-debono.github.io/marks-70th/
+URL:https://james-debono.github.io/marks-70th/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mark's 70th Birthday Celebration
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+END:VCALENDAR

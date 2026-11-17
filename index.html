@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mark's 70th Birthday Celebration</title>
+  <meta name="description" content="You're invited to Mark's 70th birthday: Saturday 12 December, 1 pm, The Criterion Hotel, Sale. Please RSVP by Wednesday 25 November.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#5D5A1E">
+
+  <!-- Link previews in WhatsApp, Messages, Facebook, email -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mark's 70th">
+  <meta property="og:title" content="You're invited to Mark's 70th Birthday">
+  <meta property="og:description" content="Saturday 12 December, 1 pm at The Criterion Hotel, Sale. Tap to RSVP by 25 November.">
+  <meta property="og:url" content="https://james-debono.github.io/marks-70th/">
+  <meta property="og:image" content="https://james-debono.github.io/marks-70th/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Invitation to Mark's 70th Birthday">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400;0,500;0,600;1,400&family=Oswald:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="styles.css?v=1">
+  <script>document.documentElement.className += ' js';</script>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero__panel">
+      <div class="stage">
+        <div class="envelope" aria-hidden="true">
+          <div class="envelope__liner"></div>
+          <div class="envelope__pocket"></div>
+        </div>
+        <img class="invite" id="invite-card"
+             src="assets/invite-card-1080.jpg"
+             srcset="assets/invite-card-720.jpg 720w, assets/invite-card-1080.jpg 1080w"
+             sizes="(min-width: 640px) 520px, 84vw"
+             width="1080" height="1456"
+             alt="You're invited to Mark's 70th Birthday. Join us to celebrate Mark turning 70. Saturday 12 December, 1 pm, at The Criterion Hotel Sale, 90 Macalister Street, Sale VIC 3850. Balcony Room, upstairs with lift and stair access. Canapés and drinks provided. The celebration doesn't have to end there: guests are welcome to continue downstairs afterwards. Please RSVP by Wednesday 25 November.">
+      </div>
+    </div>
+  </header>
+
+  <main class="details">
+    <div class="details__inner">
+
+      <section class="rsvp" aria-labelledby="event-title">
+        <h1 class="title" id="event-title">Mark's 70th Birthday Celebration</h1>
+        <p class="rsvp__deadline">Please RSVP by Wednesday 25 November</p>
+
+        <div class="rsvp__choices" role="group" aria-label="Will you be there?">
+          <button type="button" class="btn btn--choice" data-attend="yes" aria-pressed="false" aria-controls="rsvp-panel">Will attend</button>
+          <button type="button" class="btn btn--choice" data-attend="no" aria-pressed="false" aria-controls="rsvp-panel">Will not attend</button>
+        </div>
+        <p class="rsvp__previous" id="rsvp-previous" hidden></p>
+
+        <div class="rsvp__panel" id="rsvp-panel" hidden>
+          <form class="rsvp-form" id="rsvp-form" novalidate>
+            <h2 class="rsvp-form__heading" id="form-heading">Who's coming?</h2>
+            <p class="rsvp-form__hint" id="form-hint">Add everyone in your group who'll be there, with any dietary requirements.</p>
+
+            <div class="guests" id="guests"></div>
+            <button type="button" class="btn btn--add" id="add-guest">+ Add another guest</button>
+
+            <label class="field">
+              <span class="field__label">Your email <span class="field__optional">(optional)</span></span>
+              <input type="email" name="email" id="email" autocomplete="email" inputmode="email" maxlength="120" aria-describedby="email-hint">
+              <span class="field__hint" id="email-hint">We'll send you a copy of your RSVP.</span>
+            </label>
+
+            <label class="field">
+              <span class="field__label" id="message-label">Anything else we should know? <span class="field__optional">(optional)</span></span>
+              <textarea name="message" id="message" rows="3" maxlength="1000"></textarea>
+            </label>
+
+            <!-- Leave this empty. It's hidden from people and catches spam bots. -->
+            <div class="field--trap" aria-hidden="true">
+              <label>Website <input type="text" name="website" id="website" tabindex="-1" autocomplete="off"></label>
+            </div>
+
+            <div class="form-error" id="form-error" role="alert" hidden></div>
+
+            <button type="submit" class="btn btn--submit" id="submit">Send RSVP</button>
+            <p class="rsvp-form__footnote">Plans change? You can reply again any time and we'll use your latest response.</p>
+          </form>
+
+          <div class="rsvp-done" id="rsvp-done" tabindex="-1" hidden>
+            <h2 class="rsvp-done__heading" id="done-heading"></h2>
+            <p class="rsvp-done__intro" id="done-intro"></p>
+            <ul class="rsvp-done__list" id="done-list"></ul>
+            <p class="rsvp-done__email" id="done-email" hidden></p>
+            <p class="rsvp-done__outro" id="done-outro" hidden>You can still leave Mark a birthday message:</p>
+            <div class="rsvp-done__actions" id="done-actions-yes">
+              <details class="calendar calendar--light">
+                <summary class="btn btn--light">Add to calendar</summary>
+                <ul class="calendar__menu">
+                  <li><a href="event.ics">Apple Calendar (iPhone, iPad, Mac)</a></li>
+                  <li><a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Mark's%2070th%20Birthday%20Celebration&amp;dates=20261212T020000Z%2F20261212T080000Z&amp;location=The%20Criterion%20Hotel%20(Balcony%20Room)%2C%2090%20Macalister%20St%2C%20Sale%20VIC%203850&amp;details=Canap%C3%A9s%20and%20drinks%20provided.%20Dress%20code%3A%20smart%20casual.%20Balcony%20Room%20is%20upstairs%2C%20with%20lift%20and%20stair%20access.%0A%0AInvitation%3A%20https%3A%2F%2Fjames-debono.github.io%2Fmarks-70th%2F&amp;ctz=Australia%2FMelbourne" target="_blank" rel="noopener">Google Calendar</a></li>
+                  <li><a href="https://outlook.live.com/calendar/0/action/compose?path=%2Fcalendar%2Faction%2Fcompose&amp;rru=addevent&amp;subject=Mark's%2070th%20Birthday%20Celebration&amp;startdt=2026-12-12T02%3A00%3A00Z&amp;enddt=2026-12-12T08%3A00%3A00Z&amp;location=The%20Criterion%20Hotel%20(Balcony%20Room)%2C%2090%20Macalister%20St%2C%20Sale%20VIC%203850&amp;body=Canap%C3%A9s%20and%20drinks%20provided.%20Dress%20code%3A%20smart%20casual.%20Balcony%20Room%20is%20upstairs%2C%20with%20lift%20and%20stair%20access.%0A%0AInvitation%3A%20https%3A%2F%2Fjames-debono.github.io%2Fmarks-70th%2F" target="_blank" rel="noopener">Outlook / Hotmail</a></li>
+                  <li><a href="event.ics" download="marks-70th.ics">Other (download .ics file)</a></li>
+                </ul>
+              </details>
+            </div>
+            <div class="rsvp-done__actions" id="done-actions-no" hidden>
+              <a class="btn btn--light" href="https://join.au.grouptogether.com/contribute/3036c155-bac2-442c-af90-9c3ebd19ccc1" target="_blank" rel="noopener">Sign Mark's card</a>
+            </div>
+            <p class="rsvp-done__again">Plans changed? <button type="button" class="link-button" id="rsvp-again">Update your RSVP</button></p>
+          </div>
+        </div>
+      </section>
+
+      <div class="when-where">
+        <div class="when-where__item">
+          <details class="calendar">
+            <summary class="info-link">
+              <span class="caps-line">Saturday 12 December 2026</span>
+              <span class="caps-line">1:00 pm to 7:00 pm</span>
+              <span class="action-label">+ Add to calendar</span>
+            </summary>
+            <ul class="calendar__menu">
+              <li><a href="event.ics">Apple Calendar (iPhone, iPad, Mac)</a></li>
+              <li><a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Mark's%2070th%20Birthday%20Celebration&amp;dates=20261212T020000Z%2F20261212T080000Z&amp;location=The%20Criterion%20Hotel%20(Balcony%20Room)%2C%2090%20Macalister%20St%2C%20Sale%20VIC%203850&amp;details=Canap%C3%A9s%20and%20drinks%20provided.%20Dress%20code%3A%20smart%20casual.%20Balcony%20Room%20is%20upstairs%2C%20with%20lift%20and%20stair%20access.%0A%0AInvitation%3A%20https%3A%2F%2Fjames-debono.github.io%2Fmarks-70th%2F&amp;ctz=Australia%2FMelbourne" target="_blank" rel="noopener">Google Calendar</a></li>
+              <li><a href="https://outlook.live.com/calendar/0/action/compose?path=%2Fcalendar%2Faction%2Fcompose&amp;rru=addevent&amp;subject=Mark's%2070th%20Birthday%20Celebration&amp;startdt=2026-12-12T02%3A00%3A00Z&amp;enddt=2026-12-12T08%3A00%3A00Z&amp;location=The%20Criterion%20Hotel%20(Balcony%20Room)%2C%2090%20Macalister%20St%2C%20Sale%20VIC%203850&amp;body=Canap%C3%A9s%20and%20drinks%20provided.%20Dress%20code%3A%20smart%20casual.%20Balcony%20Room%20is%20upstairs%2C%20with%20lift%20and%20stair%20access.%0A%0AInvitation%3A%20https%3A%2F%2Fjames-debono.github.io%2Fmarks-70th%2F" target="_blank" rel="noopener">Outlook / Hotmail</a></li>
+              <li><a href="event.ics" download="marks-70th.ics">Other (download .ics file)</a></li>
+            </ul>
+          </details>
+          <p class="when-where__note">Canapés and drinks provided</p>
+        </div>
+        <div class="when-where__item">
+          <a class="info-link" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Criterion%20Hotel%2C%2090%20MacAlister%20St%2C%20Sale%2C%20VIC%203850&amp;query_place_id=ChIJs_lGnggvL2sRT---xCApryQ" target="_blank" rel="noopener">
+            <span class="caps-line">The Criterion Hotel</span>
+            <span class="caps-line">90 Macalister St</span>
+            <span class="caps-line">Sale, VIC 3850</span>
+            <span class="action-label">View on map</span>
+          </a>
+          <p class="when-where__note">Balcony Room: upstairs, with lift and stair access</p>
+        </div>
+      </div>
+
+      <section class="box" aria-labelledby="card-title">
+        <h2 class="box__title" id="card-title">Sign Mark's birthday card</h2>
+        <p>If you'd like to leave Mark a birthday message or contribute towards a gift, you can do so via the link below.</p>
+        <p><a class="btn btn--light" href="https://join.au.grouptogether.com/contribute/3036c155-bac2-442c-af90-9c3ebd19ccc1" target="_blank" rel="noopener">Sign the card</a></p>
+        <p>We'll print the card and present it to Mark on the day so he can enjoy all your lovely messages.</p>
+        <p>There's absolutely no obligation to contribute, but we know it would mean a lot to him to hear from you.</p>
+      </section>
+
+      <section class="box" aria-labelledby="dress-title">
+        <h2 class="box__title" id="dress-title">Dress code</h2>
+        <p>Smart Casual</p>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>We can't wait to celebrate with you.</p>
+  </footer>
+
+  <template id="guest-template">
+    <fieldset class="guest">
+      <legend class="guest__legend">Guest 1</legend>
+      <button type="button" class="guest__remove">Remove</button>
+      <div class="guest__fields">
+        <label class="field field--name">
+          <span class="field__label">Full name</span>
+          <input type="text" name="name" maxlength="80" autocapitalize="words" spellcheck="false">
+        </label>
+        <label class="field field--dietary">
+          <span class="field__label">Dietary requirements <span class="field__optional">(optional)</span></span>
+          <input type="text" name="dietary" maxlength="200" placeholder="e.g. vegetarian, gluten free">
+        </label>
+      </div>
+    </fieldset>
+  </template>
+
+  <script src="app.js?v=1"></script>
+</body>
+</html>
