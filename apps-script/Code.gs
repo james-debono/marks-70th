@@ -34,7 +34,7 @@ var SETTINGS = {
 
 var EVENT = {
   title: "Mark's 70th Birthday Celebration",
-  when: 'Saturday 12 December 2026, 1:00 pm to 7:00 pm',
+  when: 'Saturday 12 December 2026, 1:00 pm',
   venue: 'The Criterion Hotel, Balcony Room',
   venueNote: 'Upstairs, with lift and stair access',
   address: '90 Macalister Street, Sale VIC 3850',
