@@ -6,7 +6,8 @@
  *   1. writes one row per guest to the "RSVPs" tab,
  *   2. marks earlier rows for the same names as "Replaced", so the Summary tab
  *      only counts each person's latest reply,
- *   3. emails the guest a confirmation, if they gave an email address.
+ *   3. emails the guest a confirmation, if they gave an email address,
+ *   4. emails the hosts listed in the Settings tab (cell B2) about the new reply.
  *
  * After editing this file you must publish a new version, or the website keeps
  * using the old one: Deploy > Manage deployments > pencil icon > Version: New version > Deploy.
@@ -18,14 +19,17 @@
 var SETTINGS = {
   // Send guests a confirmation email when they give an address.
   sendConfirmationEmails: true,
-  // Optional: email the hosts on every RSVP. Comma-separated, e.g. 'you@gmail.com, sister@gmail.com'
-  notifyEmails: '',
   // Name shown as the sender of the emails (they come from the Google account that deployed this).
   senderName: "Mark's 70th Birthday",
   sheetName: 'RSVPs',
+  // Host alert addresses live in this tab, cell B2, so they stay out of this (public) code.
+  settingsSheetName: 'Settings',
   maxGuestsPerReply: 12,
   // Limit on confirmation emails to one address in 6 hours, so the form can't be used to spam someone.
-  maxEmailsPerAddress: 3
+  maxEmailsPerAddress: 3,
+  // A free Google account can email 100 recipients a day. Host alerts pause when fewer than this
+  // many are left, so guest confirmations keep working on a busy day. RSVPs always save.
+  alertQuotaReserve: 25
 };
 
 var EVENT = {
@@ -93,14 +97,15 @@ function doPost(e) {
   }
 
   var emailed = false;
+  var notified = false;
   if (duplicate) {
     // The same reply arrived twice (e.g. a retry after a slow connection). It's already saved.
     emailed = Boolean(reply.email && SETTINGS.sendConfirmationEmails);
   } else {
     emailed = sendConfirmation_(reply);
-    notifyHosts_(reply);
+    notified = notifyHosts_(reply, sheet);
   }
-  return json_({ ok: true, replyId: reply.replyId, emailed: emailed });
+  return json_({ ok: true, replyId: reply.replyId, emailed: emailed, notified: notified });
 }
 
 function validate_(data) {
@@ -213,23 +218,57 @@ function sendConfirmation_(reply) {
   }
 }
 
-function notifyHosts_(reply) {
-  if (!SETTINGS.notifyEmails) return;
+/** Emails the hosts listed in the Settings tab about a new reply. Returns true if sent. */
+function notifyHosts_(reply, sheet) {
   try {
+    var to = hostAddresses_();
+    if (!to.length) return false;
+    if (MailApp.getRemainingDailyQuota() < SETTINGS.alertQuotaReserve + to.length) return false;
+
+    var yes = reply.attending === 'Yes';
     var count = reply.guests.length;
-    var subject = 'RSVP: ' + reply.guests[0].name + (count > 1 ? ' +' + (count - 1) : '') +
-      (reply.attending === 'Yes' ? ' (attending)' : ' (not attending)');
+    var totals = totals_(sheet);
+    var subject = (yes ? 'RSVP yes: ' : 'RSVP no: ') + reply.guests[0].name + (count > 1 ? ' +' + (count - 1) : '');
     var lines = reply.guests.map(function (g) {
       return '- ' + g.name + (g.dietary ? ' (' + g.dietary + ')' : '');
     });
-    var body = lines.join('\n') +
-      (reply.email ? '\n\nEmail: ' + reply.email : '') +
+    var body = (yes ? 'Coming:' : "Can't make it:") + '\n' + lines.join('\n') +
       (reply.message ? '\n\nMessage:\n' + reply.message : '') +
-      '\n\nAll replies: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl();
-    MailApp.sendEmail(SETTINGS.notifyEmails, subject, body, { name: SETTINGS.senderName });
+      (reply.email ? '\n\nTheir email: ' + reply.email + ' (reply to this email to write back to them)' : '') +
+      '\n\nSo far: ' + totals.yes + ' attending, ' + totals.no + ' not attending.' +
+      '\nAll replies: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl();
+
+    var options = { name: SETTINGS.senderName };
+    if (reply.email) options.replyTo = reply.email;
+    MailApp.sendEmail(to.join(','), subject, body, options);
+    return true;
   } catch (err) {
-    console.error('Host notification failed: ' + err);
+    console.error('Host alert failed: ' + err);
+    return false;
   }
+}
+
+/** Valid addresses from Settings!B2 (separated by commas, semicolons or spaces). */
+function hostAddresses_() {
+  var settings = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SETTINGS.settingsSheetName);
+  if (!settings) return [];
+  return String(settings.getRange('B2').getValue() || '')
+    .split(/[\s,;]+/)
+    .filter(function (address) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address); });
+}
+
+/** People currently attending / not attending, counting only each person's latest reply. */
+function totals_(sheet) {
+  var totals = { yes: 0, no: 0 };
+  var last = sheet.getLastRow();
+  if (last < 2) return totals;
+  // Columns C (Attending) to H (Status).
+  sheet.getRange(2, 3, last - 1, 6).getValues().forEach(function (row) {
+    if (row[5] !== 'Current') return;
+    if (row[0] === 'Yes') totals.yes++;
+    else if (row[0] === 'No') totals.no++;
+  });
+  return totals;
 }
 
 function confirmationHtml_(reply) {

@@ -10,11 +10,15 @@ A plain HTML/CSS/JS page hosted free on GitHub Pages. RSVPs go to a private Goog
 2. `app.js` sends the reply to the Apps Script web app (the `RSVP_ENDPOINT` at the top of `app.js`).
 3. The script (`apps-script/Code.gs`, pasted into the sheet under Extensions > Apps Script) adds one row per guest to the **RSVPs** tab and marks any earlier rows for the same names as `Replaced`, so a guest who changes their mind is only counted once.
 4. If the guest gave an email address, they get a confirmation email sent from the Google account that deployed the script.
+5. Everyone listed in the sheet's **Settings** tab (cell B2) gets an alert email with the reply and the running headcount. Hitting reply on an alert writes back to the guest, if they left an email address.
 
 The sheet's other tabs:
 
 - **Summary**: headcount, list of attending guests, dietary requirements, messages, and replies from names that aren't on the guest list.
 - **Guest list**: paste invitees into column A (one per row) and column B shows who has replied.
+- **Settings**: the addresses that get an alert for each RSVP. They live in the private sheet rather than in this public code.
+
+A free Google account can send emails to 100 recipients a day. Alerts pause if fewer than 25 remain, so guest confirmations keep working on a busy day; RSVPs always save either way.
 
 ## Changing things
 
@@ -23,7 +27,7 @@ The sheet's other tabs:
 | Wording, date, venue, dress code on the page | `index.html` |
 | Calendar entry | `event.ics` and the two calendar links in `index.html` (search for `calendar.google.com` and `outlook.live.com`) |
 | Confirmation email text, sender name | `EVENT` and `SETTINGS` at the top of `apps-script/Code.gs` |
-| Get an email for every RSVP | Set `notifyEmails` in `apps-script/Code.gs` |
+| Who gets an alert for every RSVP | **Settings** tab of the sheet, cell B2 (takes effect straight away, no redeploy) |
 | Stop confirmation emails | Set `sendConfirmationEmails: false` in `apps-script/Code.gs` |
 | Card or background image | Replace the files in `assets/` (same names) |
 
